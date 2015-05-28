@@ -5,7 +5,7 @@ import os
 import json
 import copy
 import csv
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 import pytz
 import isodate
 
@@ -94,6 +94,7 @@ writecsv('rawdata.csv', history, conn)
 # compress to milestone
 milestone_states = {}
 keys = sorted(history.keys())
+milestones.append(str(datetime.now(pytz.utc).date() + timedelta(days=1)))
 for milestone in milestones:
     milestone = isodate.parse_date(milestone)
 
