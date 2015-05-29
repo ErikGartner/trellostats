@@ -55,7 +55,9 @@ history = {datetime.now(pytz.utc): lists}
 
 # start creating the history
 lists = copy.deepcopy(lists)
-for action in sorted(board.actions, key=lambda x: x.date, reverse=True):
+sorted_boards =  sorted(board.actions, key=lambda x: x.date, reverse=True)
+print('Retrieved %d actions for %s. Oldest from %s' % (len(sorted_boards), board.name, sorted_boards[-1].date))
+for action in sorted_boards:
 
     if action.type == 'createCard':
         lst = action.data['list']['id']
