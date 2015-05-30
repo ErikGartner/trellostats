@@ -96,12 +96,12 @@ writecsv('rawdata.csv', history, conn)
 # compress to milestone
 milestone_states = {}
 keys = sorted(history.keys())
-milestones.append(str(datetime.now(pytz.utc).date() + timedelta(days=1)))
 for milestone in milestones:
     milestone = isodate.parse_date(milestone)
 
     while len(keys) > 0 and keys[0].date() < milestone:
         key = keys.pop(0)
         milestone_states.update({milestone: history[key]})
-
+if len(keys) > 0:
+    milestone_states.update({datetime.now(pytz.utc).date(): history[keys[-1]]})
 writecsv('milestonedata.csv', milestone_states, conn)
