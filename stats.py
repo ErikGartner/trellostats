@@ -8,6 +8,10 @@ import csv
 from datetime import datetime, date, time, timedelta
 import pytz
 import isodate
+import pickle
+import time
+import plotly.plotly as py
+from plotly.graph_objs import *
 
 def writecsv(filename, indata, conn):
     with open(filename, 'wb') as csvfile:
@@ -57,6 +61,13 @@ history = {datetime.now(pytz.utc): lists}
 lists = copy.deepcopy(lists)
 sorted_boards =  sorted(board.actions, key=lambda x: x.date, reverse=True)
 print('Retrieved %d actions for %s. Oldest from %s' % (len(sorted_boards), board.name, sorted_boards[-1].date))
+
+# pickle raw data for backup purpose and future use.
+back_time = str(int(round(time.time() * 1000)))
+with open('backup/' + back_time + '_actions', 'w') as myfile:
+    raw_action_data = map(lambda a: a.data, sorted_boards)
+    pickle.dump(raw_action_data, myfile)
+
 for action in sorted_boards:
 
     if action.type == 'createCard':

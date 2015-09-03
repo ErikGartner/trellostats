@@ -5,6 +5,8 @@ Generates Trello list stats throughout time with support for milestones.
 To work properly trollop needs to be modified to set request limit of action
 from 50 to 1000.
 
+You also needs to create a backup folde were the raw actions are stored.
+
 Example settings.json:
 ```json
 {
