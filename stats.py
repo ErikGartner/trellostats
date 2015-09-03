@@ -16,7 +16,7 @@ from plotly.graph_objs import *
 def writecsv(filename, indata, conn):
     with open(filename, 'wb') as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
         keys = sorted(indata.keys())
         # headers
         list_keys = list(indata[keys[0]].keys())
@@ -64,7 +64,7 @@ print('Retrieved %d actions for %s. Oldest from %s' % (len(sorted_boards), board
 
 # pickle raw data for backup purpose and future use.
 back_time = str(int(round(time.time() * 1000)))
-with open('backup/' + back_time + '_actions', 'w') as myfile:
+with open('backup/%s_%s_actions' % (board_id, back_time), 'w') as myfile:
     raw_action_data = map(lambda a: a.data, sorted_boards)
     pickle.dump(raw_action_data, myfile)
 
