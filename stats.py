@@ -10,8 +10,6 @@ import pytz
 import isodate
 import pickle
 import time
-import plotly.plotly as py
-from plotly.graph_objs import *
 
 def writecsv(filename, indata, conn):
     with open(filename, 'wb') as csvfile:
