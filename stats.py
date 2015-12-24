@@ -1,4 +1,5 @@
-# Designed for python27
+#!/usr/bin/env python
+
 from trollop import TrelloConnection
 import sys
 import os
@@ -11,6 +12,7 @@ import isodate
 import pickle
 import time
 
+
 def writecsv(filename, indata, conn):
     with open(filename, 'wb') as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
@@ -20,7 +22,7 @@ def writecsv(filename, indata, conn):
         list_keys = list(indata[keys[0]].keys())
         header = ['Date']
         for key in list_keys:
-            header.append(conn.get_list(key).name.encode("ascii","ignore"))
+            header.append(conn.get_list(key).name.encode("ascii", "ignore"))
 
         writer.writerow(header)
         # data
@@ -36,17 +38,17 @@ def writecsv(filename, indata, conn):
 
 
 try:
-  with open('settings.json', 'r') as myfile:
-      settings = json.load(myfile)
-      app_key = settings['app_key']
-      user_key = settings['user_key']
-      board_id = settings['board']
-      milestones = settings['milestones']
+    with open('settings.json', 'r') as myfile:
+        settings = json.load(myfile)
+        app_key = settings['app_key']
+        user_key = settings['user_key']
+        board_id = settings['board']
+        milestones = settings['milestones']
 except:
     print('Error while reading settings.json')
     sys.exit()
 
-conn = TrelloConnection(app_key,user_key)
+conn = TrelloConnection(app_key, user_key)
 board = conn.get_board(board_id)
 
 # copy all lists current form
@@ -57,8 +59,9 @@ history = {datetime.now(pytz.utc): lists}
 
 # start creating the history
 lists = copy.deepcopy(lists)
-sorted_boards =  sorted(board.actions, key=lambda x: x.date, reverse=True)
-print('Retrieved %d actions for %s. Oldest from %s' % (len(sorted_boards), board.name, sorted_boards[-1].date))
+sorted_boards = sorted(board.actions, key=lambda x: x.date, reverse=True)
+print('Retrieved %d actions for %s. Oldest from %s' %
+      (len(sorted_boards), board.name, sorted_boards[-1].date))
 
 # pickle raw data for backup purpose and future use.
 back_time = str(int(round(time.time() * 1000)))
@@ -78,20 +81,20 @@ for action in sorted_boards:
 
     if action.type == 'createCard':
         lst = action.data['list']['id']
-        lists[lst] = max(lists[lst] - 1,0);
+        lists[lst] = max(lists[lst] - 1, 0)
 
     elif action.type == 'updateCard':
         if 'listBefore' in action.data:
             old_lst = action.data['listBefore']['id']
             new_lst = action.data['listAfter']['id']
-            if not old_lst in lists:
+            if old_lst not in lists:
                 lists[old_lst] = 0
             lists[old_lst] = lists[old_lst] + 1
-            lists[new_lst] = max(lists[new_lst] - 1,0)
+            lists[new_lst] = max(lists[new_lst] - 1, 0)
 
     elif action.type == 'convertToCardFromCheckItem':
         lst = action.data['list']['id']
-        lists[lst] = lists[lst] - 1;
+        lists[lst] = lists[lst] - 1
 
     elif action.type == 'deleteCard':
         lst = action.data['list']['id']

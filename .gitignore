@@ -1,2 +1,6 @@
 venv/
 settings.json
+milestonedata.csv
+rawdata.csv
+backup/
+.env
