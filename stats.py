@@ -59,14 +59,14 @@ history = {datetime.now(pytz.utc): lists}
 
 # start creating the history
 lists = copy.deepcopy(lists)
-sorted_boards = sorted(board.actions, key=lambda x: x.date, reverse=True)
+sorted_actions = sorted(board.actions, key=lambda x: x.date, reverse=True)
 print('Retrieved %d actions for %s. Oldest from %s' %
-      (len(sorted_boards), board.name, sorted_boards[-1].date))
+      (len(sorted_actions), board.name, sorted_actions[-1].date))
 
 # pickle raw data for backup purpose and future use.
 back_time = str(int(round(time.time() * 1000)))
 with open('backup/%s_%s_actions' % (board_id, back_time), 'w') as myfile:
-    raw_data = map(lambda a: a._data, sorted_boards)
+    raw_data = map(lambda a: a._data, sorted_actions)
     pickle.dump(raw_data, myfile)
 
 with open('backup/%s_%s_cards' % (board_id, back_time), 'w') as myfile:
@@ -77,7 +77,7 @@ with open('backup/%s_%s_lists' % (board_id, back_time), 'w') as myfile:
     raw_data = map(lambda a: a._data, board.lists)
     pickle.dump(raw_data, myfile)
 
-for action in sorted_boards:
+for action in sorted_actions:
 
     if action.type == 'createCard':
         lst = action.data['list']['id']
